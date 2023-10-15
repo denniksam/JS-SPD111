@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms</title>
+    <!--Import Google Icon Font-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">        
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <h1>Форми. Валідація форм.</h1>
+    <p>
+        Форми - засоби HTML для передачі даних від 
+        користувача до сервера. Форми автоматично збирають
+        введені дані у певні поля та передають їх. 
+        Валідація - процес перевірки введених даних на
+        відповідність певним правилам та відмова у надсиланні
+        якщо правила порушені.
+    </p>
+    <p>
+        Існує два класичних способи реалізації валідації. <br/>
+        1) Перехват повідомлення від форми про надсилання даних <br/>
+        2) Відмова від автоматичного надсилання і збір даних
+           "вручну" - за допомогою скрипту. 
+    </p>
+    <h2>Перехват повідомлення</h2>
+    <p>
+        При надсиланні (натиску на кнопку "submit") форма створює
+        подію "submit", її обробник "onsubmit" може бути 
+        підключений до документу. Але перехоплення повідомлення 
+        не зупиняє надсилання форми, лише дозволяє додати 
+        активності. Для зупинки надсилання слід викликати
+        метод <code>e.preventDefault()</code>  у об'єкта-події
+    </p>
+    <form id="login-form">
+        <input name="user-login" placeholder="Введіть логін"/>
+        <input type="submit" value="Надіслати"/>
+    </form>
+    <p>
+        Форма "збирає" дані з полів, які мають атрибут "name",
+        інші поля можуть вільно розміщуватись на формі, проте,
+        передача даних, введених у них, відбуватись не буде.
+        В об'єкт-подію самі дані форми не передаються, але 
+        є посилання на саму форму (e.target). Вилучення даних 
+        для валідації проводиться у скрипті. 
+    </p>
+    <div class="row">
+        <form class="col s12" id="name-phone-form">
+          <div class="row">
+            <div class="input-field col s5">
+              <i class="material-icons prefix">account_circle</i>
+              <input name="user-name" id="icon_prefix" type="text" class="validate">
+              <label for="icon_prefix">First Name</label>
+              <span class="helper-text" 
+                    data-error="Ім'я не може бути порожним, містити цифри чи спецзнаки" 
+                    data-success="Приймається">Введіть ім'я</span>
+            </div>
+            <div class="input-field col s5">
+              <i class="material-icons prefix">phone_iphone</i>
+              <input name="user-phone" id="icon_telephone" type="tel" class="validate">
+              <label for="icon_telephone">Telephone</label>
+              <span class="helper-text" 
+                    data-error="Телефон не може бути порожним, складається з цифр" 
+                    data-success="Приймається">Введіть номер телефону</span>
+            </div>
+            <div class="input-field col s2">
+                <button type="submit" class="waves-effect waves-light btn purple darken-3">
+                    <i class="material-icons right">send</i>
+                    button
+                </button>
+            </div>
+          </div>
+        </form>
+      </div>
+<p>
+    Якщо є потреба валідації кількох форм, то перехват подій надсилання
+    краще делегувати самим формам (а не документу). 
+</p>
+<h2>Регулярні вирази</h2>
+<p>
+    Поглиблені можливості валідації надають регулярні вирази. 
+    Основу виразів складають наступні елементи:
+</p>
+<ul class="collection">
+    <li class="collection-item">
+        Узагальнені символи (Unicode): <br/>
+        \s - space (пробіл, табуляція, розрив,...),<br/>
+        \S - non-space,<br/>
+        \d - digit,<br/>
+        \D - non-digit,<br/>
+        \w - word (допустимість у іменах змінних: букви, цифри, підкреслення),<br/>
+        \W - non-word<br/>
+        .  - довільний символ<br/>
+        а також символи-якоря<br/>
+        ^ - початок рядку<br/>
+        $ - кінець рядку
+    </li>
+    <li class="collection-item">
+        Множини символів:<br/>
+        [abc] - один з символів "а", або "b", або "с"<br/>
+        [a-f] - один з діапазону від "а" до "f"<br/>
+        [^abc] - один, окрім перелічених<br/>
+        а також групи:<br/>
+        () - група, набір символів, що вваються за ціле
+    </li>
+    <li class="collection-item">
+        Квантифікатори (покажчики кількості)<br/>
+        ? - один або 0<br/>
+        + - один або довільна кількість<br/>
+        * - довільна кількість (у т.ч. 0)<br/>
+        {3} - рівно 3 рази<br/>
+        {3,5} - від 3 до 5<br/>
+        {3,} - 3 та більше
+    </li>
+    <li class="collection-item"></li>
+    <li class="collection-item"></li>
+</ul>
+      
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
