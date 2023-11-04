@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="mainApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular</title>
+    <!--Import Google Icon Font-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">        
+    
+    <script src="angular.min.js"></script>    
+</head>
+<body>
+    <h1>Основи Angular</h1>
+    <p>
+        Angular - JS фреймворк. Існує два види фреймворків:
+        <a href="https://angularjs.org/">Angular.JS</a> (або Angular-1) 
+        та <a href="https://angular.io/">Angular-CLI</a>
+    </p>
+    <p>
+        Концепція Angular полягає у компонентній моделі, схожій на ООП. 
+        Задачі розбиваються на певні групи, для яких створюються 
+        компоненти, що є локалізованими утвореннями (мають локальні 
+        дані, змінні тощо - віджети) і при цьому взаємодіють з 
+        глобальним контекстом.
+        А також реалізація патерну MVVM, який дозволяє зв'язування (та
+        спостереження) з автоматичним оновленням представлення (View)
+        при зміні значень Моделі, яка знаходиться під спостереженням. 
+    </p>
+    <p>
+        Angular впроваджується у HTML та ставить під автоматичне 
+        спостереження блок, позначений атрибутом <code>ng-app</code>.
+        Частіше за все, цим атрибутом позначають увесь документ
+        &lt;html ng-app>. Усередині блоку опрацьовуються вирази,
+        для створення виразу використовуються подвійні фігурні дужки
+        { { 3 + 4 } } = {{ 3 + 4 }}
+    </p>
+    <p>
+        Зв'язування даних відбувається через моделі. Модель може бути
+        створена як у HTML (атрибутом <code>ng-model</code>), так і у коді. 
+        <input ng-model="username"/>
+        Доступ до даних моделі здійснюється через вираз з її іменем:
+        введено - <b>{{username}}</b>
+    </p>
+    <div class="row">
+        <div class="col">
+            Замовник: <input ng-model="client" type="text"/>
+            Замовлення:
+            <label>
+                <input name="group1" type="radio" ng-model="form" value="Delivery"/>
+                <span>Доставка</span>
+              </label>
+              <label>
+                <input name="group1" type="radio" ng-model="form" value="Pickup"/>
+                <span>Самовивіз</span>
+              </label>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col" style="width: 100%, imp !important;">
+                  <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                      <span class="card-title">{{client}}</span>
+                      <p>{{form}}</p>
+                    </div>
+                    <div class="card-action">
+                      <a href="#">This is a link</a>
+                      <a href="#">This is a link</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+
+<div ng-controller="mainController">
+    <h2>Контролери</h2>
+    <p>
+        Контролери - спосіб утворення та ініціалізації scope - локальної
+        області (лексикографічного околу) застосунку. Див. скрипт та 
+        коментарі у ньому. Окіл по-перше дозволяє створити змінні, функції,
+        які доступні всім дочірнім елементам контролера. По-друге, надає
+        програмний доступ до їх значень. По-третє, автоматично ставить
+        на спостереження ці змінні (вважає їх моделями).
+    </p>
+    <p>
+        data1 = {{data1}}
+        <button ng-click="btnClick()">Add !</button>
+    </p>
+    <p>
+        <button ng-click="decClick()">--</button>
+        <b>{{data2}}</b>
+        <button ng-click="incClick()">++</button>
+    </p>
+</div>
+
+Поза контролером data1 = {{data1}}
+
+<div ng-controller="secondController">
+    data1 = {{data1}}
+</div>
+
+<h2>Директиви</h2>
+<p>
+    В Angular директиви - розширення ідеї контролера зі спрощеним
+    впровадженням у DOM, а також з можливістю включення до свого 
+    складу розмітки. Директиви включаються одним з наступних способів
+</p>
+<ul>
+    <li>restrict: "A" - через атрибут довільного тега</li>
+    <li>restrict: "С" - через ім'я класу</li>
+    <li>restrict: "M" - через коментар</li>
+    <li>restrict: "E" - через ім'я тегу (самий поширений спосіб)</li>
+    <li>restrict: "ACE" - комбінований (довільний набір літер)</li>
+</ul>
+<div directive1></div>
+<div class="directive2"></div>
+<!-- directive:directive3 -->
+<directive4></directive4>
+
+<h2>Компоненти</h2>
+<p>
+    Компоненти - це еволюція директив, певна "обгортка" над ними. 
+    З найбільш поширеними значеннями за замовчанням: 
+    впровадження у теги, ізоляція околу і т.п. 
+</p>
+<component1></component1>
+<component2></component2>
+
+<div style="height: 30vh;"></div>
+ 
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

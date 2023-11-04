@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <style>
+        .green {
+            color: lime;
+        }
+    </style>
+</head>
+<body>
+    <h1>React</h1>
+    <p>
+        React (React JS) - бібліотека для задач фронтенду. 
+        Аналогічно Angular існують дві можливості працювати
+        з React - за допомогою JS модулів та через CLI. 
+    </p>
+    <p>
+        Концепція схожа з Angular - локалізація, утворення 
+        незалежних компонентів з власним околом змінних. 
+        Головна відмінність - відсутність автоматичного спостереження
+        за змінними і, як наслідок, потреба у "примусовому"
+        виклику методів оновлення. 
+        Структура React також відрізняється, для його підключення
+        потрібні декілька скриптів: <code>react</code> - ядро
+        бібліотеки, "інструменти" створення (опису) компонентів;
+        <code>react-dom</code> - модуль взаємодії з DOM
+        (з браузером), "інструменти" впровадження компонентів.
+    </p>
+    <div id="component1"></div>
+    <h2>JSX</h2>
+    <p>
+        З метою спрощення декларації елементів React був розроблений
+        спеціальний синтаксис - JSX. Він схожий на HTML, але є
+        "проміжним кодом" для перетворення у елементну форму. 
+        Це перетворення виконує спеціальний модуль <code>babel</code>.
+        Відповідно, для демонстрації роботи з JSX необхідний ще один скрипт. 
+    </p>
+    <p>
+        JSX скрипти мають бути позначені атрибутом 
+        <code>type="text/babel"</code>, у т.ч. ті, що підключються
+        з окремого ресурсу (файлу)
+    </p>
+    <p>
+        <code>Cannot read properties of undefined (reading 'setState')
+            at plusButtonClick</code>
+        Ефект бібліотеки можна простежити і в тому, що подійний механізм
+        береться від браузера. Встановлення обробників формально підписує
+        метод класу до слухання подій. Це свідчить про те, що виклик методу
+        буде відбуватись Subject-ом події, тобто об'єктом window. Пізнє
+        зв'язування дає ефект, що звернення до <code>this</code> буде 
+        вважатись як window.this, що є <code>undefined</code>
+    </p>
+    <div id="component2"></div>
+    <rates></rates>
+<div style="height: 30vh;"></div>
+<!-- Load React. -->
+<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="script.js"></script>
+<script type="text/babel">
+class Component2 extends React.Component {
+    constructor(props) {
+        super(props);  // у C# - base - звернення до батьківського класу
+        console.log(props);
+        this.state = {  // певний аналог $scope (з Angular)
+            cnt: Number(props.cnt || 100)    // саме його оновлення буде призводити
+        }               // до пере-render() - зміни відображення
+        this.plusButtonClick = this.plusButtonClick.bind(this);
+        this.minusButtonClick = this.minusButtonClick.bind(this);
+    }
+    plusButtonClick() {
+        // this.state.cnt += 1 ; -- не буде працювати, авто-спостереження немає
+        this.setState(  // з React.Component
+            { cnt: this.state.cnt + 1 }  // варіант - з новими даними
+        ) ;
+    }
+    minusButtonClick() {
+        this.setState(  // варіант - з модифікацією стану
+            state => {  // приходить наявний стан
+                state.cnt -= 1;  // модифікуємо
+                return state;    // повертаємо змінений стан
+            }
+        );
+    }
+    render() {
+        // <> - React.Fragment - контейнер для елементів без проміжного DOM 
+        return <> 
+            <h3>Hello from JSX</h3>
+            <button onClick={this.minusButtonClick}>--</button>
+            <b>{this.state.cnt}</b> 
+            <button onClick={this.plusButtonClick}>++</button>
+        </>
+    }
+}
+ReactDOM.render( <Component2 cnt="200" />, 
+    document.getElementById("component2"));
+</script>
+<script type="text/babel">
+    class Rates extends React.Component {
+        constructor(props) {
+            super(props); 
+            this.state = {
+                rates: []  // на старті порожній масив даних (але оголошений)
+            }
+        }
+        loadRates() {
+            const url = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
+            fetch(url).then(r => r.json()).then(j => {
+                this.setState( { rates: j } );
+            });
+        }
+        componentDidMount() {  // подія React.Component - монтування об'єкту
+            this.loadRates();
+        }
+        render() {
+            return <>
+                <h3>Курс валют { this.state.rates[0] && <i> <u>за</u> {this.state.rates[0].exchangedate} </i> }</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Назва</th><th>Курс</th>
+                        </tr>
+                    </thead>
+                    <tbody>{
+                        this.state.rates.map( rate => 
+                            <tr key={rate.r030}>
+                                <td>{rate.txt}</td>
+                                <td>{rate.rate}</td>
+                            </tr>
+                        )
+                    }</tbody>
+                </table>
+            </>
+        }
+    }
+    ReactDOM.render(<Rates/>, document.querySelector('rates'));
+</script>
+</body>
+</html>
